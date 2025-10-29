@@ -4,32 +4,75 @@
 
 @layer base {
   :root {
-    --monad-blue: #200052;
-    --monad-purple: #836EF9;
-    --monad-berry: #A0055D;
-    --monad-off-white: #FBFAF9;
-    --monad-black: #0E100F;
+    /* Candy Crush-style vibrant colors - Light Theme */
+    --candy-pink: #FF69B4;
+    --candy-orange: #FF8C42;
+    --candy-yellow: #FFD93D;
+    --candy-green: #6BCF7F;
+    --candy-blue: #4ECDC4;
+    --candy-purple: #A78BFA;
+    --candy-red: #FF6B9D;
     
-    --background: 0 0% 100%;
-    --foreground: 222.2 84% 4.9%;
+    /* Light theme colors */
+    --background: 210 100% 97%;
+    --foreground: 280 10% 15%;
     --card: 0 0% 100%;
-    --card-foreground: 222.2 84% 4.9%;
+    --card-foreground: 280 10% 15%;
     --popover: 0 0% 100%;
-    --popover-foreground: 222.2 84% 4.9%;
-    --primary: 222.2 47.4% 11.2%;
-    --primary-foreground: 210 40% 98%;
-    --secondary: 210 40% 96.1%;
-    --secondary-foreground: 222.2 47.4% 11.2%;
-    --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
-    --accent: 210 40% 96.1%;
-    --accent-foreground: 222.2 47.4% 11.2%;
-    --destructive: 0 84.2% 60.2%;
+    --popover-foreground: 280 10% 15%;
+    --primary: 330 81% 60%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 39 100% 62%;
+    --secondary-foreground: 280 10% 15%;
+    --muted: 210 40% 96%;
+    --muted-foreground: 215 16% 47%;
+    --accent: 195 53% 79%;
+    --accent-foreground: 280 10% 15%;
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 214 32% 91%;
+    --input: 214 32% 91%;
+    --ring: 330 81% 60%;
+    --radius: 1rem;
+    
+    /* Success color */
+    --success: 142 71% 45%;
+    --success-foreground: 0 0% 100%;
+  }
+
+  .dark {
+    /* Dark theme colors - Still vibrant but darker backgrounds */
+    --background: 280 30% 8%;
+    --foreground: 210 40% 98%;
+    --card: 280 25% 12%;
+    --card-foreground: 210 40% 98%;
+    --popover: 280 25% 12%;
+    --popover-foreground: 210 40% 98%;
+    --primary: 330 81% 60%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 39 100% 62%;
+    --secondary-foreground: 280 10% 15%;
+    --muted: 280 20% 20%;
+    --muted-foreground: 215 20% 65%;
+    --accent: 195 53% 50%;
+    --accent-foreground: 210 40% 98%;
+    --destructive: 0 84% 60%;
     --destructive-foreground: 210 40% 98%;
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 222.2 84% 4.9%;
-    --radius: 0.5rem;
+    --border: 280 20% 25%;
+    --input: 280 20% 25%;
+    --ring: 330 81% 60%;
+    
+    /* Dark theme candy colors */
+    --candy-pink: #FF69B4;
+    --candy-orange: #FF8C42;
+    --candy-yellow: #FFD93D;
+    --candy-green: #6BCF7F;
+    --candy-blue: #4ECDC4;
+    --candy-purple: #A78BFA;
+    --candy-red: #FF6B9D;
+    
+    --success: 142 71% 45%;
+    --success-foreground: 0 0% 100%;
   }
 
   * {
@@ -46,68 +89,130 @@
     font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
       'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
       sans-serif;
+    transition: background-color 0.3s ease, color 0.3s ease;
   }
 }
 
 @layer utilities {
-  .bg-monad-blue {
-    background-color: var(--monad-blue);
+  /* Candy colors utility classes */
+  .bg-candy-pink {
+    background-color: var(--candy-pink);
   }
   
-  .bg-monad-purple {
-    background-color: var(--monad-purple);
+  .bg-candy-orange {
+    background-color: var(--candy-orange);
   }
   
-  .bg-monad-berry {
-    background-color: var(--monad-berry);
+  .bg-candy-yellow {
+    background-color: var(--candy-yellow);
   }
   
-  .bg-monad-off-white {
-    background-color: var(--monad-off-white);
+  .bg-candy-green {
+    background-color: var(--candy-green);
   }
   
-  .bg-monad-black {
-    background-color: var(--monad-black);
+  .bg-candy-blue {
+    background-color: var(--candy-blue);
   }
   
-  .text-monad-blue {
-    color: var(--monad-blue);
+  .bg-candy-purple {
+    background-color: var(--candy-purple);
   }
   
-  .text-monad-purple {
-    color: var(--monad-purple);
+  .bg-candy-red {
+    background-color: var(--candy-red);
   }
   
-  .text-monad-berry {
-    color: var(--monad-berry);
+  .text-candy-pink {
+    color: var(--candy-pink);
   }
   
-  .text-monad-off-white {
-    color: var(--monad-off-white);
+  .text-candy-orange {
+    color: var(--candy-orange);
   }
   
-  .text-monad-black {
-    color: var(--monad-black);
+  .text-candy-yellow {
+    color: var(--candy-yellow);
   }
   
-  .border-monad-blue {
-    border-color: var(--monad-blue);
+  .text-candy-green {
+    color: var(--candy-green);
   }
   
-  .border-monad-purple {
-    border-color: var(--monad-purple);
+  .text-candy-blue {
+    color: var(--candy-blue);
   }
   
-  .border-monad-berry {
-    border-color: var(--monad-berry);
+  .text-candy-purple {
+    color: var(--candy-purple);
   }
   
-  .border-monad-off-white {
-    border-color: var(--monad-off-white);
+  .text-candy-red {
+    color: var(--candy-red);
   }
   
-  .border-monad-black {
-    border-color: var(--monad-black);
+  .border-candy-pink {
+    border-color: var(--candy-pink);
+  }
+  
+  .border-candy-orange {
+    border-color: var(--candy-orange);
+  }
+  
+  .border-candy-yellow {
+    border-color: var(--candy-yellow);
+  }
+  
+  .border-candy-green {
+    border-color: var(--candy-green);
+  }
+  
+  .border-candy-blue {
+    border-color: var(--candy-blue);
+  }
+  
+  .border-candy-purple {
+    border-color: var(--candy-purple);
+  }
+  
+  .border-candy-red {
+    border-color: var(--candy-red);
+  }
+  
+  /* Gradient backgrounds */
+  .bg-gradient-candy {
+    background: linear-gradient(135deg, var(--candy-pink) 0%, var(--candy-orange) 25%, var(--candy-yellow) 50%, var(--candy-green) 75%, var(--candy-blue) 100%);
+  }
+  
+  .bg-gradient-candy-soft {
+    background: linear-gradient(135deg, rgba(255, 105, 180, 0.1) 0%, rgba(255, 140, 66, 0.1) 50%, rgba(107, 207, 127, 0.1) 100%);
+  }
+  
+  /* Animation utilities */
+  .animate-bounce-slow {
+    animation: bounce 2s ease-in-out infinite;
+  }
+  
+  .animate-pulse-soft {
+    animation: pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  }
+  
+  .animate-wiggle {
+    animation: wiggle 1s ease-in-out infinite;
+  }
+  
+  .animate-float {
+    animation: float 3s ease-in-out infinite;
+  }
+  
+  @keyframes wiggle {
+    0%, 100% { transform: rotate(-3deg); }
+    50% { transform: rotate(3deg); }
+  }
+  
+  @keyframes float {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-10px); }
   }
 }
 
