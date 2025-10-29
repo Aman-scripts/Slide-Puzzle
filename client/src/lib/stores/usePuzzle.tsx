@@ -2,7 +2,7 @@ import { create } from "zustand";
 import { subscribeWithSelector } from "zustand/middleware";
 
 export type Difficulty = "easy" | "medium" | "hard";
-export type GamePhase = "menu" | "playing" | "completed";
+export type GamePhase = "menu" | "playing" | "completed" | "playerInfo";
 export type PuzzleImage = 1 | 2 | 3;
 
 interface Tile {
@@ -19,10 +19,13 @@ interface PuzzleState {
   startTime: number | null;
   selectedImage: PuzzleImage;
   showHints: boolean;
+  playerName: string;
+  walletAddress: string;
   
   setDifficulty: (difficulty: Difficulty) => void;
   setSelectedImage: (image: PuzzleImage) => void;
   toggleHints: () => void;
+  setPlayerInfo: (name: string, wallet: string) => void;
   startGame: () => void;
   moveTile: (position: number) => void;
   resetGame: () => void;
@@ -31,9 +34,9 @@ interface PuzzleState {
 
 const getGridSize = (difficulty: Difficulty): number => {
   switch (difficulty) {
-    case "easy": return 3;
-    case "medium": return 4;
-    case "hard": return 5;
+    case "easy": return 2;
+    case "medium": return 3;
+    case "hard": return 4;
   }
 };
 
@@ -103,6 +106,8 @@ export const usePuzzle = create<PuzzleState>()(
     startTime: null,
     selectedImage: 1,
     showHints: false,
+    playerName: "",
+    walletAddress: "",
     
     setDifficulty: (difficulty) => {
       set({ difficulty });
@@ -114,6 +119,10 @@ export const usePuzzle = create<PuzzleState>()(
     
     toggleHints: () => {
       set((state) => ({ showHints: !state.showHints }));
+    },
+    
+    setPlayerInfo: (name, wallet) => {
+      set({ playerName: name, walletAddress: wallet });
     },
     
     startGame: () => {
