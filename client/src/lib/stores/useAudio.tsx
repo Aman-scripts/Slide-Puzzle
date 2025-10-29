@@ -31,20 +31,16 @@ export const useAudio = create<AudioState>((set, get) => ({
   setSuccessSound: (sound) => set({ successSound: sound }),
   
   toggleMute: () => {
-    const { isMuted, backgroundMusic, isMusicPlaying } = get();
+    const { isMuted } = get();
     const newMutedState = !isMuted;
     
     set({ isMuted: newMutedState });
     
-    if (backgroundMusic && isMusicPlaying) {
-      backgroundMusic.muted = newMutedState;
-    }
-    
-    console.log(`Sound ${newMutedState ? 'muted' : 'unmuted'}`);
+    console.log(`Sound effects ${newMutedState ? 'muted' : 'unmuted'}`);
   },
   
   toggleMusic: () => {
-    const { backgroundMusic, isMusicPlaying, isMuted } = get();
+    const { backgroundMusic, isMusicPlaying } = get();
     
     if (!backgroundMusic) return;
     
@@ -55,7 +51,7 @@ export const useAudio = create<AudioState>((set, get) => ({
     } else {
       backgroundMusic.loop = true;
       backgroundMusic.volume = 0.3;
-      backgroundMusic.muted = isMuted;
+      backgroundMusic.muted = false;
       backgroundMusic.play().catch(error => {
         console.log("Background music play prevented:", error);
       });
