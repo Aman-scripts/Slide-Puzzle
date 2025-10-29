@@ -3,17 +3,111 @@
 @tailwind utilities;
 
 @layer base {
+  :root {
+    --monad-blue: #200052;
+    --monad-purple: #836EF9;
+    --monad-berry: #A0055D;
+    --monad-off-white: #FBFAF9;
+    --monad-black: #0E100F;
+    
+    --background: 0 0% 100%;
+    --foreground: 222.2 84% 4.9%;
+    --card: 0 0% 100%;
+    --card-foreground: 222.2 84% 4.9%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 222.2 84% 4.9%;
+    --primary: 222.2 47.4% 11.2%;
+    --primary-foreground: 210 40% 98%;
+    --secondary: 210 40% 96.1%;
+    --secondary-foreground: 222.2 47.4% 11.2%;
+    --muted: 210 40% 96.1%;
+    --muted-foreground: 215.4 16.3% 46.9%;
+    --accent: 210 40% 96.1%;
+    --accent-foreground: 222.2 47.4% 11.2%;
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 210 40% 98%;
+    --border: 214.3 31.8% 91.4%;
+    --input: 214.3 31.8% 91.4%;
+    --ring: 222.2 84% 4.9%;
+    --radius: 0.5rem;
+  }
+
   * {
     @apply border-border;
   }
 
   body {
-    @apply font-sans antialiased bg-background text-foreground;
+    @apply antialiased bg-background text-foreground;
     margin: 0;
     padding: 0;
     overflow: hidden;
     width: 100vw;
     height: 100vh;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+      'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+      sans-serif;
+  }
+}
+
+@layer utilities {
+  .bg-monad-blue {
+    background-color: var(--monad-blue);
+  }
+  
+  .bg-monad-purple {
+    background-color: var(--monad-purple);
+  }
+  
+  .bg-monad-berry {
+    background-color: var(--monad-berry);
+  }
+  
+  .bg-monad-off-white {
+    background-color: var(--monad-off-white);
+  }
+  
+  .bg-monad-black {
+    background-color: var(--monad-black);
+  }
+  
+  .text-monad-blue {
+    color: var(--monad-blue);
+  }
+  
+  .text-monad-purple {
+    color: var(--monad-purple);
+  }
+  
+  .text-monad-berry {
+    color: var(--monad-berry);
+  }
+  
+  .text-monad-off-white {
+    color: var(--monad-off-white);
+  }
+  
+  .text-monad-black {
+    color: var(--monad-black);
+  }
+  
+  .border-monad-blue {
+    border-color: var(--monad-blue);
+  }
+  
+  .border-monad-purple {
+    border-color: var(--monad-purple);
+  }
+  
+  .border-monad-berry {
+    border-color: var(--monad-berry);
+  }
+  
+  .border-monad-off-white {
+    border-color: var(--monad-off-white);
+  }
+  
+  .border-monad-black {
+    border-color: var(--monad-black);
   }
 }
 
