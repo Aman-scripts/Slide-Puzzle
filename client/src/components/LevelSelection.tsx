@@ -2,7 +2,7 @@ import { usePuzzle, type Difficulty, type PuzzleImage } from "@/lib/stores/usePu
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { useState } from "react";
-import { Sparkles, Star, Zap } from "lucide-react";
+import { Sparkles, Star, Zap, Trophy } from "lucide-react";
 
 const levels: { 
   difficulty: Difficulty; 
@@ -19,7 +19,7 @@ const levels: {
     difficulty: "easy",
     title: "Easy",
     description: "Perfect for beginners",
-    gridSize: "3x3 Grid",
+    gridSize: "2x2 Grid",
     icon: Star,
     bgColor: "bg-candy-green/20",
     textColor: "text-candy-green",
@@ -30,7 +30,7 @@ const levels: {
     difficulty: "medium",
     title: "Medium",
     description: "A moderate challenge",
-    gridSize: "4x4 Grid",
+    gridSize: "3x3 Grid",
     icon: Sparkles,
     bgColor: "bg-candy-orange/20",
     textColor: "text-candy-orange",
@@ -41,7 +41,7 @@ const levels: {
     difficulty: "hard",
     title: "Hard",
     description: "For puzzle masters",
-    gridSize: "5x5 Grid",
+    gridSize: "4x4 Grid",
     icon: Zap,
     bgColor: "bg-candy-pink/20",
     textColor: "text-candy-pink",
@@ -56,8 +56,12 @@ const puzzleImages: { id: PuzzleImage; name: string; preview: string }[] = [
   { id: 3, name: "Hexagonal Grid", preview: "/images/monad-puzzle-3.png" }
 ];
 
-export function LevelSelection() {
-  const { setDifficulty, startGame, selectedImage, setSelectedImage } = usePuzzle();
+interface LevelSelectionProps {
+  onShowLeaderboard: () => void;
+}
+
+export function LevelSelection({ onShowLeaderboard }: LevelSelectionProps) {
+  const { setDifficulty, selectedImage, setSelectedImage } = usePuzzle();
   const [selectedDifficulty, setSelectedDifficultyState] = useState<Difficulty | null>(null);
   
   const handleLevelSelect = (difficulty: Difficulty) => {
@@ -65,10 +69,9 @@ export function LevelSelection() {
     setSelectedDifficultyState(difficulty);
   };
   
-  const handleStartGame = () => {
+  const handleContinue = () => {
     if (selectedDifficulty) {
-      setDifficulty(selectedDifficulty);
-      startGame();
+      usePuzzle.setState({ phase: "playerInfo" });
     }
   };
   
@@ -92,45 +95,56 @@ export function LevelSelection() {
       </div>
       
       {!selectedDifficulty ? (
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-6xl w-full relative z-10">
-          {levels.map((level, index) => {
-            const Icon = level.icon;
-            return (
-              <Card 
-                key={level.difficulty}
-                className={`group bg-card/95 backdrop-blur-lg border-2 ${level.hoverBorder} transition-all duration-300 cursor-pointer hover:scale-105 hover:shadow-2xl animate-in fade-in slide-in-from-bottom`}
-                style={{ animationDelay: `${index * 150}ms` }}
-                onClick={() => handleLevelSelect(level.difficulty)}
-              >
-                <CardHeader className="text-center">
-                  <div className={`mx-auto mb-4 w-20 h-20 rounded-full ${level.bgColor} flex items-center justify-center group-hover:scale-110 transition-transform duration-300`}>
-                    <Icon className={`w-10 h-10 ${level.textColor}`} />
-                  </div>
-                  <CardTitle className="text-3xl md:text-4xl font-bold bg-gradient-to-r from-candy-pink to-candy-purple bg-clip-text text-transparent">
-                    {level.title}
-                  </CardTitle>
-                  <CardDescription className={`${level.textColor} text-lg font-semibold`}>
-                    {level.gridSize}
-                  </CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <p className="text-muted-foreground text-center mb-4">
-                    {level.description}
-                  </p>
-                  <Button 
-                    className={`w-full ${level.buttonBg} text-white font-bold text-lg py-6 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300`}
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      handleLevelSelect(level.difficulty);
-                    }}
-                  >
-                    Select Level
-                  </Button>
-                </CardContent>
-              </Card>
-            );
-          })}
-        </div>
+        <>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-6xl w-full relative z-10 mb-6">
+            {levels.map((level, index) => {
+              const Icon = level.icon;
+              return (
+                <Card 
+                  key={level.difficulty}
+                  className={`group bg-card/95 backdrop-blur-lg border-2 ${level.hoverBorder} transition-all duration-300 cursor-pointer hover:scale-105 hover:shadow-2xl animate-in fade-in slide-in-from-bottom`}
+                  style={{ animationDelay: `${index * 150}ms` }}
+                  onClick={() => handleLevelSelect(level.difficulty)}
+                >
+                  <CardHeader className="text-center">
+                    <div className={`mx-auto mb-4 w-20 h-20 rounded-full ${level.bgColor} flex items-center justify-center group-hover:scale-110 transition-transform duration-300`}>
+                      <Icon className={`w-10 h-10 ${level.textColor}`} />
+                    </div>
+                    <CardTitle className="text-3xl md:text-4xl font-bold bg-gradient-to-r from-candy-pink to-candy-purple bg-clip-text text-transparent">
+                      {level.title}
+                    </CardTitle>
+                    <CardDescription className={`${level.textColor} text-lg font-semibold`}>
+                      {level.gridSize}
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent>
+                    <p className="text-muted-foreground text-center mb-4">
+                      {level.description}
+                    </p>
+                    <Button 
+                      className={`w-full ${level.buttonBg} text-white font-bold text-lg py-6 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300`}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleLevelSelect(level.difficulty);
+                      }}
+                    >
+                      Select Level
+                    </Button>
+                  </CardContent>
+                </Card>
+              );
+            })}
+          </div>
+          
+          <Button
+            onClick={onShowLeaderboard}
+            variant="outline"
+            className="border-2 border-candy-yellow/40 hover:bg-candy-yellow/20 text-foreground font-semibold px-8 py-6 text-lg relative z-10"
+          >
+            <Trophy className="w-5 h-5 mr-2 text-candy-yellow" />
+            View Leaderboard
+          </Button>
+        </>
       ) : (
         <div className="max-w-4xl w-full relative z-10 animate-in fade-in slide-in-from-bottom duration-500">
           <Button
@@ -180,11 +194,11 @@ export function LevelSelection() {
           </div>
           
           <Button
-            onClick={handleStartGame}
+            onClick={handleContinue}
             className="w-full bg-gradient-to-r from-candy-pink via-candy-orange to-candy-purple hover:opacity-90 text-white text-xl md:text-2xl font-bold py-8 rounded-2xl shadow-2xl hover:shadow-3xl transition-all duration-300 hover:scale-105"
           >
             <Sparkles className="w-6 h-6 mr-2" />
-            Start Game
+            Continue
             <Sparkles className="w-6 h-6 ml-2" />
           </Button>
         </div>

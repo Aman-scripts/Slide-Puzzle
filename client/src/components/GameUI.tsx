@@ -8,25 +8,33 @@ import Confetti from "react-confetti";
 import { Timer, RotateCcw, Home, Volume2, VolumeX, Lightbulb, Music, Sun, Moon, Sparkles, Trophy } from "lucide-react";
 
 export function GameUI() {
-  const { moves, startTime, phase, resetGame, backToMenu, difficulty, showHints, toggleHints } = usePuzzle();
+  const { moves, startTime, phase, resetGame, backToMenu, difficulty, showHints, toggleHints, playerName, walletAddress } = usePuzzle();
   const { isMuted, toggleMute, playSuccess, isMusicPlaying, toggleMusic } = useAudio();
   const { theme, toggleTheme } = useTheme();
   const [elapsedTime, setElapsedTime] = useState(0);
   const [hasPlayedSuccess, setHasPlayedSuccess] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [hasSubmitted, setHasSubmitted] = useState(false);
   
   useEffect(() => {
     if (phase === "completed" && !hasPlayedSuccess) {
       playSuccess();
       setHasPlayedSuccess(true);
+      setHasSubmitted(false);
     }
     
     if (phase === "playing") {
       setHasPlayedSuccess(false);
+      setElapsedTime(0);
     }
   }, [phase, playSuccess, hasPlayedSuccess]);
   
   useEffect(() => {
-    if (phase !== "playing" || !startTime) return;
+    if (phase !== "playing" || !startTime) {
+      return;
+    }
+    
+    setElapsedTime(0);
     
     const interval = setInterval(() => {
       setElapsedTime(Math.floor((Date.now() - startTime) / 1000));
@@ -43,9 +51,9 @@ export function GameUI() {
   
   const getDifficultyLabel = () => {
     switch (difficulty) {
-      case "easy": return "Easy (3x3)";
-      case "medium": return "Medium (4x4)";
-      case "hard": return "Hard (5x5)";
+      case "easy": return "Easy (2x2)";
+      case "medium": return "Medium (3x3)";
+      case "hard": return "Hard (4x4)";
       default: return "";
     }
   };
@@ -58,6 +66,41 @@ export function GameUI() {
       default: return "text-candy-blue";
     }
   };
+
+  const submitToLeaderboard = async () => {
+    if (!difficulty || isSubmitting || hasSubmitted) return;
+
+    setIsSubmitting(true);
+    try {
+      const response = await fetch("/api/leaderboard", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          playerName,
+          walletAddress: walletAddress || null,
+          difficulty,
+          timeSeconds: elapsedTime,
+          moves,
+        }),
+      });
+
+      if (response.ok) {
+        setHasSubmitted(true);
+      }
+    } catch (error) {
+      console.error("Error submitting to leaderboard:", error);
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  useEffect(() => {
+    if (phase === "completed" && !hasSubmitted && !isSubmitting) {
+      submitToLeaderboard();
+    }
+  }, [phase, hasSubmitted, isSubmitting]);
   
   return (
     <>
@@ -86,6 +129,11 @@ export function GameUI() {
               <div className={`${getDifficultyColor()} text-sm font-semibold`}>
                 {getDifficultyLabel()}
               </div>
+              {playerName && (
+                <div className="text-xs text-muted-foreground border-t border-candy-purple/20 pt-2 mt-1">
+                  Player: {playerName}
+                </div>
+              )}
             </div>
           </CardContent>
         </Card>
@@ -194,6 +242,11 @@ export function GameUI() {
                   <Sparkles className="w-5 h-5" />
                   {moves} Moves
                 </div>
+                {hasSubmitted && (
+                  <div className="mt-3 text-sm text-candy-green font-semibold">
+                    ✓ Score submitted to leaderboard!
+                  </div>
+                )}
               </div>
               
               <div className="flex gap-4 justify-center">
