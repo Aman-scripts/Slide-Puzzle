@@ -2,7 +2,7 @@ import { useMemo, useEffect } from "react";
 import { usePuzzle } from "@/lib/stores/usePuzzle";
 
 export function SlidePuzzle() {
-  const { tiles, difficulty, moveTile } = usePuzzle();
+  const { tiles, difficulty, moveTile, selectedImage, showHints } = usePuzzle();
   
   const gridSize = useMemo(() => {
     switch (difficulty) {
@@ -17,10 +17,15 @@ export function SlidePuzzle() {
     return 100 / gridSize;
   }, [gridSize]);
   
+  const imageUrl = useMemo(() => {
+    return `/images/monad-puzzle-${selectedImage}.png`;
+  }, [selectedImage]);
+  
   useEffect(() => {
     console.log("Puzzle initialized with grid size:", gridSize);
     console.log("Total tiles:", tiles.length);
-  }, [gridSize, tiles.length]);
+    console.log("Selected image:", imageUrl);
+  }, [gridSize, tiles.length, imageUrl]);
   
   const handleTileClick = (position: number) => {
     console.log("Tile clicked at position:", position);
@@ -43,6 +48,8 @@ export function SlidePuzzle() {
           const currentRow = Math.floor(tile.position / gridSize);
           const currentCol = tile.position % gridSize;
           
+          const isCorrectPosition = tile.id === tile.position;
+          
           return (
             <div
               key={tile.id}
@@ -56,14 +63,25 @@ export function SlidePuzzle() {
                 height: `${tileSize}%`,
                 left: `${currentCol * tileSize}%`,
                 top: `${currentRow * tileSize}%`,
-                backgroundImage: tile.isEmpty ? "none" : "url(/images/monad-puzzle.png)",
+                backgroundImage: tile.isEmpty ? "none" : `url(${imageUrl})`,
                 backgroundSize: `${gridSize * 100}%`,
                 backgroundPosition: `${col * 100}% ${row * 100}%`,
-                border: tile.isEmpty ? "none" : "2px solid rgba(131, 110, 249, 0.3)",
+                border: tile.isEmpty ? "none" : showHints && isCorrectPosition 
+                  ? "3px solid rgba(131, 249, 110, 0.8)" 
+                  : "2px solid rgba(131, 110, 249, 0.3)",
                 borderRadius: "4px",
+                boxShadow: showHints && isCorrectPosition 
+                  ? "0 0 10px rgba(131, 249, 110, 0.5)" 
+                  : "none"
               }}
               onClick={() => handleTileClick(tile.position)}
-            />
+            >
+              {showHints && !tile.isEmpty && !isCorrectPosition && (
+                <div className="absolute top-1 right-1 bg-monad-berry/80 text-white text-xs px-2 py-1 rounded">
+                  {tile.id + 1}
+                </div>
+              )}
+            </div>
           );
         })}
       </div>

@@ -3,6 +3,7 @@ import { subscribeWithSelector } from "zustand/middleware";
 
 export type Difficulty = "easy" | "medium" | "hard";
 export type GamePhase = "menu" | "playing" | "completed";
+export type PuzzleImage = 1 | 2 | 3;
 
 interface Tile {
   id: number;
@@ -16,8 +17,12 @@ interface PuzzleState {
   tiles: Tile[];
   moves: number;
   startTime: number | null;
+  selectedImage: PuzzleImage;
+  showHints: boolean;
   
   setDifficulty: (difficulty: Difficulty) => void;
+  setSelectedImage: (image: PuzzleImage) => void;
+  toggleHints: () => void;
   startGame: () => void;
   moveTile: (position: number) => void;
   resetGame: () => void;
@@ -96,9 +101,19 @@ export const usePuzzle = create<PuzzleState>()(
     tiles: [],
     moves: 0,
     startTime: null,
+    selectedImage: 1,
+    showHints: false,
     
     setDifficulty: (difficulty) => {
       set({ difficulty });
+    },
+    
+    setSelectedImage: (image) => {
+      set({ selectedImage: image });
+    },
+    
+    toggleHints: () => {
+      set((state) => ({ showHints: !state.showHints }));
     },
     
     startGame: () => {

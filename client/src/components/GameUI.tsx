@@ -4,11 +4,11 @@ import { useAudio } from "@/lib/stores/useAudio";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import Confetti from "react-confetti";
-import { Timer, RotateCcw, Home, Volume2, VolumeX } from "lucide-react";
+import { Timer, RotateCcw, Home, Volume2, VolumeX, Lightbulb, Music } from "lucide-react";
 
 export function GameUI() {
-  const { moves, startTime, phase, resetGame, backToMenu, difficulty } = usePuzzle();
-  const { isMuted, toggleMute, playSuccess } = useAudio();
+  const { moves, startTime, phase, resetGame, backToMenu, difficulty, showHints, toggleHints } = usePuzzle();
+  const { isMuted, toggleMute, playSuccess, isMusicPlaying, toggleMusic } = useAudio();
   const [elapsedTime, setElapsedTime] = useState(0);
   const [hasPlayedSuccess, setHasPlayedSuccess] = useState(false);
   
@@ -80,10 +80,39 @@ export function GameUI() {
         
         <div className="flex gap-2 pointer-events-auto">
           <Button
+            onClick={toggleHints}
+            variant="outline"
+            size="icon"
+            className={`${
+              showHints 
+                ? "bg-monad-purple text-white border-monad-purple" 
+                : "bg-monad-off-white/95 hover:bg-monad-off-white border-monad-purple/30 text-monad-blue"
+            }`}
+            title="Toggle hints"
+          >
+            <Lightbulb className="w-5 h-5" />
+          </Button>
+          
+          <Button
+            onClick={toggleMusic}
+            variant="outline"
+            size="icon"
+            className={`${
+              isMusicPlaying
+                ? "bg-monad-purple text-white border-monad-purple"
+                : "bg-monad-off-white/95 hover:bg-monad-off-white border-monad-purple/30 text-monad-blue"
+            }`}
+            title="Toggle background music"
+          >
+            <Music className="w-5 h-5" />
+          </Button>
+          
+          <Button
             onClick={toggleMute}
             variant="outline"
             size="icon"
             className="bg-monad-off-white/95 hover:bg-monad-off-white border-monad-purple/30"
+            title="Toggle sound"
           >
             {isMuted ? (
               <VolumeX className="w-5 h-5 text-monad-blue" />
@@ -97,6 +126,7 @@ export function GameUI() {
             variant="outline"
             size="icon"
             className="bg-monad-off-white/95 hover:bg-monad-off-white border-monad-purple/30"
+            title="Restart puzzle"
           >
             <RotateCcw className="w-5 h-5 text-monad-blue" />
           </Button>
@@ -106,6 +136,7 @@ export function GameUI() {
             variant="outline"
             size="icon"
             className="bg-monad-off-white/95 hover:bg-monad-off-white border-monad-purple/30"
+            title="Back to menu"
           >
             <Home className="w-5 h-5 text-monad-blue" />
           </Button>
